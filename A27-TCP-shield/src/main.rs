@@ -20,7 +20,7 @@
 //! Run:    ./target/release/a27-tcp-shield config.json
 
 use serde::Deserialize;
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 use std::net::IpAddr;
 use std::sync::{Arc, Mutex};
 use std::time::Instant;
@@ -30,6 +30,8 @@ use tokio::net::{TcpListener, TcpStream};
 #[derive(Debug, Deserialize, Clone)]
 struct Service {
     name: String,
+    #[serde(default = "default_true")]
+    enabled: bool, // false => entry is kept in the config but not started
     listen: String,
     origin: String,
     #[serde(default)]
@@ -43,6 +45,10 @@ struct Service {
 #[derive(Debug, Deserialize)]
 struct Config {
     services: Vec<Service>,
+}
+
+fn default_true() -> bool {
+    true
 }
 
 /// Per-source-IP token bucket for NEW connections.
@@ -183,10 +189,22 @@ async fn main() {
     let path = std::env::args().nth(1).unwrap_or_else(|| "config.json".into());
     let raw = std::fs::read_to_string(&path)
         .unwrap_or_else(|e| panic!("read config {}: {}", path, e));
-    let cfg: Config =
+    let mut cfg: Config =
         serde_json::from_str(&raw).unwrap_or_else(|e| panic!("parse config: {}", e));
+    cfg.services.retain(|s| s.enabled);
     if cfg.services.is_empty() {
-        panic!("no services configured");
+        panic!("no enabled services configured");
+    }
+    // Two services cannot bind the same address; fail loudly instead of
+    // silently losing one of them.
+    let mut seen = HashSet::new();
+    for s in &cfg.services {
+        if !seen.insert(s.listen.clone()) {
+            panic!(
+                "duplicate listen address {} (service '{}') — each enabled service needs its own port",
+                s.listen, s.name
+            );
+        }
     }
 
     println!("A27-TCP-shield starting — {} service(s)", cfg.services.len());

@@ -15,7 +15,7 @@
 //! Run:    ./target/release/a27-udp-shield config.json
 
 use serde::Deserialize;
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 use std::net::{IpAddr, SocketAddr};
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::{Arc, Mutex};
@@ -26,6 +26,8 @@ use tokio::time::{sleep, timeout};
 #[derive(Debug, Deserialize, Clone)]
 struct Service {
     name: String,
+    #[serde(default = "default_true")]
+    enabled: bool, // false => entry is kept in the config but not started
     listen: String,
     origin: String,
     #[serde(default)]
@@ -43,6 +45,10 @@ struct Config {
     #[serde(default)]
     session_idle_sec: u64, // 0 => defaults to 60
     services: Vec<Service>,
+}
+
+fn default_true() -> bool {
+    true
 }
 
 /// Per-source-IP token bucket.
@@ -99,7 +105,7 @@ struct Session {
 /// valid client packet. Refine against real captures from your own servers.
 fn validate(game: &str, pkt: &[u8]) -> bool {
     match game {
-        "samp" | "fivem" | "bedrock" => !pkt.is_empty(),
+        "samp" | "fivem" | "minecraft-bedrock" => !pkt.is_empty(),
         _ => !pkt.is_empty(),
     }
 }
@@ -246,8 +252,20 @@ async fn main() {
     if cfg.session_idle_sec == 0 {
         cfg.session_idle_sec = 60;
     }
+    cfg.services.retain(|s| s.enabled);
     if cfg.services.is_empty() {
-        panic!("no services configured");
+        panic!("no enabled services configured");
+    }
+    // Two services cannot bind the same address; fail loudly instead of
+    // silently losing one of them.
+    let mut seen = HashSet::new();
+    for s in &cfg.services {
+        if !seen.insert(s.listen.clone()) {
+            panic!(
+                "duplicate listen address {} (service '{}') — each enabled service needs its own port",
+                s.listen, s.name
+            );
+        }
     }
 
     println!("A27-UDP-shield starting — {} service(s)", cfg.services.len());

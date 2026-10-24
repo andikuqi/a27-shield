@@ -1,6 +1,7 @@
 # A27-shield
 
-Hidden-origin reverse proxies for self-hosted game servers, by **Andi Kuqi**.
+Hidden-origin reverse proxies for self-hosted game servers (FiveM, Minecraft,
+SA-MP, Multi Theft Auto + more game servers), by **Andi Kuqi**.
 
 Two companion tools keep your servers reachable by placing a proxy on a
 DDoS-protected public IP in front of a **secret origin IP**. They validate and
@@ -9,8 +10,8 @@ server address.
 
 | Tool | Protocol | Games / services | Ports |
 |------|----------|------------------|-------|
-| **A27-UDP-shield** | UDP | SA-MP, FiveM (game side), Minecraft Bedrock | 7777, 30120/udp, 19132 |
-| **A27-TCP-shield** | TCP | Minecraft Java, FiveM (TCP side) | 25565, 30120/tcp |
+| **A27-UDP-shield** | UDP | FiveM (game side), Minecraft Bedrock, SA-MP, Multi Theft Auto + more game servers | 30120/udp, 19132, 7777, 22003 |
+| **A27-TCP-shield** | TCP | FiveM (TCP side), Minecraft Java + more game servers | 30120/tcp, 25565 |
 
 > **FiveM uses both UDP and TCP on 30120.** Run *both* shields for it: a UDP
 > entry in A27-UDP-shield and a TCP entry in A27-TCP-shield.
@@ -124,9 +125,9 @@ Replace `PROXY_IP` with your proxy machine's address.
 
 **Linux (nftables / iptables):**
 ```bash
-# UDP example (SA-MP 7777) — allow only the proxy, drop the rest
-iptables -A INPUT -p udp --dport 7777 -s PROXY_IP -j ACCEPT
-iptables -A INPUT -p udp --dport 7777 -j DROP
+# UDP example (FiveM 30120) — allow only the proxy, drop the rest
+iptables -A INPUT -p udp --dport 30120 -s PROXY_IP -j ACCEPT
+iptables -A INPUT -p udp --dport 30120 -j DROP
 
 # TCP example (Minecraft Java 25565)
 iptables -A INPUT -p tcp --dport 25565 -s PROXY_IP -j ACCEPT

@@ -1,18 +1,10 @@
 {
-  "_help": "Each service is one TCP game/service to protect. Set every 'origin' to your HIDDEN backend IP:port. Enable only what you run — each 'listen' port must be unique on the proxy machine.",
+  "_help": "Each service is one game port to protect. Only the featured games are enabled; set \"enabled\": true on the ones you run and false on the rest. Set every 'origin' to your HIDDEN backend IP:port. Each enabled 'listen' port must be unique — many games share defaults (7777, 27015), so change the port if you run two of them. Ports are the games' defaults; match them to your server's own config.",
   "services": [
     {
-      "_comment": "Minecraft Java Edition — TCP 25565",
-      "name": "minecraft-java",
-      "listen": "0.0.0.0:25565",
-      "origin": "10.0.0.5:25565",
-      "max_conns_per_ip": 8,
-      "conn_rate_per_sec": 5,
-      "conn_burst": 10
-    },
-    {
-      "_comment": "FiveM TCP side — TCP 30120 (UDP side is handled by A27-UDP-shield)",
+      "_comment": "FiveM (GTA V) — TCP 30120 (TCP side (UDP side is in A27-UDP-shield))",
       "name": "fivem-tcp",
+      "enabled": true,
       "listen": "0.0.0.0:30120",
       "origin": "10.0.0.5:30120",
       "max_conns_per_ip": 16,
@@ -20,13 +12,244 @@
       "conn_burst": 20
     },
     {
-      "_comment": "Source engine RCON (CS2/TF2/GMod remote console) — TCP 27015. Keep caps LOW; this is admin-only.",
+      "_comment": "Minecraft Java Edition — TCP 25565",
+      "name": "minecraft-java",
+      "enabled": true,
+      "listen": "0.0.0.0:25565",
+      "origin": "10.0.0.5:25565",
+      "max_conns_per_ip": 8,
+      "conn_rate_per_sec": 5,
+      "conn_burst": 10
+    },
+    {
+      "_comment": "Minecraft Java Edition — TCP 25575 (RCON, admin-only, keep caps LOW)",
+      "name": "minecraft-rcon",
+      "enabled": false,
+      "listen": "0.0.0.0:25575",
+      "origin": "10.0.0.5:25575",
+      "max_conns_per_ip": 2,
+      "conn_rate_per_sec": 1,
+      "conn_burst": 3
+    },
+    {
+      "_comment": "Multi Theft Auto: San Andreas — TCP 22005 (HTTP resource downloads, needed to join)",
+      "name": "mtasa-http",
+      "enabled": true,
+      "listen": "0.0.0.0:22005",
+      "origin": "10.0.0.5:22005",
+      "max_conns_per_ip": 16,
+      "conn_rate_per_sec": 10,
+      "conn_burst": 30
+    },
+    {
+      "_comment": "RedM (RDR2) — TCP 30120 (same default port as FiveM)",
+      "name": "redm-tcp",
+      "enabled": false,
+      "listen": "0.0.0.0:30120",
+      "origin": "10.0.0.5:30120",
+      "max_conns_per_ip": 16,
+      "conn_rate_per_sec": 10,
+      "conn_burst": 20
+    },
+    {
+      "_comment": "RAGE:MP (GTA V) — TCP 22006 (HTTP resource downloads)",
+      "name": "ragemp-http",
+      "enabled": false,
+      "listen": "0.0.0.0:22006",
+      "origin": "10.0.0.5:22006",
+      "max_conns_per_ip": 16,
+      "conn_rate_per_sec": 10,
+      "conn_burst": 30
+    },
+    {
+      "_comment": "alt:V (GTA V) — TCP 7788",
+      "name": "altv-tcp",
+      "enabled": false,
+      "listen": "0.0.0.0:7788",
+      "origin": "10.0.0.5:7788",
+      "max_conns_per_ip": 16,
+      "conn_rate_per_sec": 10,
+      "conn_burst": 20
+    },
+    {
+      "_comment": "Rust — TCP 28016 (WebRCON, admin-only, keep caps LOW)",
+      "name": "rust-rcon",
+      "enabled": false,
+      "listen": "0.0.0.0:28016",
+      "origin": "10.0.0.5:28016",
+      "max_conns_per_ip": 2,
+      "conn_rate_per_sec": 1,
+      "conn_burst": 3
+    },
+    {
+      "_comment": "7 Days to Die — TCP 26900",
+      "name": "7dtd-tcp",
+      "enabled": false,
+      "listen": "0.0.0.0:26900",
+      "origin": "10.0.0.5:26900",
+      "max_conns_per_ip": 8,
+      "conn_rate_per_sec": 5,
+      "conn_burst": 10
+    },
+    {
+      "_comment": "Satisfactory — TCP 7777 (HTTPS API)",
+      "name": "satisfactory-api",
+      "enabled": false,
+      "listen": "0.0.0.0:7777",
+      "origin": "10.0.0.5:7777",
+      "max_conns_per_ip": 8,
+      "conn_rate_per_sec": 5,
+      "conn_burst": 10
+    },
+    {
+      "_comment": "Satisfactory — TCP 8888 (reliable messaging)",
+      "name": "satisfactory-msg",
+      "enabled": false,
+      "listen": "0.0.0.0:8888",
+      "origin": "10.0.0.5:8888",
+      "max_conns_per_ip": 8,
+      "conn_rate_per_sec": 5,
+      "conn_burst": 10
+    },
+    {
+      "_comment": "Eco — TCP 3001 (web interface)",
+      "name": "eco-web",
+      "enabled": false,
+      "listen": "0.0.0.0:3001",
+      "origin": "10.0.0.5:3001",
+      "max_conns_per_ip": 16,
+      "conn_rate_per_sec": 10,
+      "conn_burst": 30
+    },
+    {
+      "_comment": "Terraria / tModLoader — TCP 7777",
+      "name": "terraria",
+      "enabled": false,
+      "listen": "0.0.0.0:7777",
+      "origin": "10.0.0.5:7777",
+      "max_conns_per_ip": 8,
+      "conn_rate_per_sec": 5,
+      "conn_burst": 10
+    },
+    {
+      "_comment": "Starbound — TCP 21025",
+      "name": "starbound",
+      "enabled": false,
+      "listen": "0.0.0.0:21025",
+      "origin": "10.0.0.5:21025",
+      "max_conns_per_ip": 8,
+      "conn_rate_per_sec": 5,
+      "conn_burst": 10
+    },
+    {
+      "_comment": "Vintage Story — TCP 42420",
+      "name": "vintagestory",
+      "enabled": false,
+      "listen": "0.0.0.0:42420",
+      "origin": "10.0.0.5:42420",
+      "max_conns_per_ip": 8,
+      "conn_rate_per_sec": 5,
+      "conn_burst": 10
+    },
+    {
+      "_comment": "Avorion — TCP 27000",
+      "name": "avorion-tcp",
+      "enabled": false,
+      "listen": "0.0.0.0:27000",
+      "origin": "10.0.0.5:27000",
+      "max_conns_per_ip": 8,
+      "conn_rate_per_sec": 5,
+      "conn_burst": 10
+    },
+    {
+      "_comment": "Space Station 14 — TCP 1212 (HTTP status API)",
+      "name": "ss14-status",
+      "enabled": false,
+      "listen": "0.0.0.0:1212",
+      "origin": "10.0.0.5:1212",
+      "max_conns_per_ip": 16,
+      "conn_rate_per_sec": 10,
+      "conn_burst": 30
+    },
+    {
+      "_comment": "Counter-Strike 2 / CS:GO / CS 1.6 / Source engine (TF2, Garry's Mod, L4D2) — TCP 27015 (RCON, admin-only, keep caps LOW)",
       "name": "source-rcon",
+      "enabled": false,
       "listen": "0.0.0.0:27015",
       "origin": "10.0.0.5:27015",
       "max_conns_per_ip": 2,
       "conn_rate_per_sec": 1,
       "conn_burst": 3
+    },
+    {
+      "_comment": "Assetto Corsa — TCP 9600",
+      "name": "assettocorsa-tcp",
+      "enabled": false,
+      "listen": "0.0.0.0:9600",
+      "origin": "10.0.0.5:9600",
+      "max_conns_per_ip": 8,
+      "conn_rate_per_sec": 5,
+      "conn_burst": 10
+    },
+    {
+      "_comment": "Assetto Corsa — TCP 8081 (HTTP lobby)",
+      "name": "assettocorsa-http",
+      "enabled": false,
+      "listen": "0.0.0.0:8081",
+      "origin": "10.0.0.5:8081",
+      "max_conns_per_ip": 16,
+      "conn_rate_per_sec": 10,
+      "conn_burst": 30
+    },
+    {
+      "_comment": "BeamMP (BeamNG.drive) — TCP 30814",
+      "name": "beammp-tcp",
+      "enabled": false,
+      "listen": "0.0.0.0:30814",
+      "origin": "10.0.0.5:30814",
+      "max_conns_per_ip": 8,
+      "conn_rate_per_sec": 5,
+      "conn_burst": 10
+    },
+    {
+      "_comment": "OpenTTD — TCP 3979",
+      "name": "openttd-tcp",
+      "enabled": false,
+      "listen": "0.0.0.0:3979",
+      "origin": "10.0.0.5:3979",
+      "max_conns_per_ip": 8,
+      "conn_rate_per_sec": 5,
+      "conn_burst": 10
+    },
+    {
+      "_comment": "TeamSpeak 3 — TCP 30033 (file transfer)",
+      "name": "teamspeak-files",
+      "enabled": false,
+      "listen": "0.0.0.0:30033",
+      "origin": "10.0.0.5:30033",
+      "max_conns_per_ip": 8,
+      "conn_rate_per_sec": 5,
+      "conn_burst": 10
+    },
+    {
+      "_comment": "TeamSpeak 3 — TCP 10011 (ServerQuery, admin-only, keep caps LOW)",
+      "name": "teamspeak-query",
+      "enabled": false,
+      "listen": "0.0.0.0:10011",
+      "origin": "10.0.0.5:10011",
+      "max_conns_per_ip": 2,
+      "conn_rate_per_sec": 1,
+      "conn_burst": 3
+    },
+    {
+      "_comment": "Mumble — TCP 64738 (control channel)",
+      "name": "mumble-tcp",
+      "enabled": false,
+      "listen": "0.0.0.0:64738",
+      "origin": "10.0.0.5:64738",
+      "max_conns_per_ip": 8,
+      "conn_rate_per_sec": 5,
+      "conn_burst": 10
     }
   ]
 }

@@ -1,0 +1,20 @@
+[package]
+name = "a27-tcp-shield"
+version = "0.1.0"
+edition = "2021"
+authors = ["Andi Kuqi"]
+license = "MIT"
+description = "Hidden-origin TCP reverse proxy for game servers (Minecraft Java, FiveM TCP)"
+
+[[bin]]
+name = "a27-tcp-shield"
+path = "src/main.rs"
+
+[dependencies]
+tokio = { version = "1.40.0", features = ["full"] }
+serde = { version = "1.0.210", features = ["derive"] }
+serde_json = "1.0.128"
+
+[profile.release]
+opt-level = 3
+lto = true

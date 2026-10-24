@@ -1,0 +1,32 @@
+{
+  "_help": "Each service is one TCP game/service to protect. Set every 'origin' to your HIDDEN backend IP:port. Enable only what you run — each 'listen' port must be unique on the proxy machine.",
+  "services": [
+    {
+      "_comment": "Minecraft Java Edition — TCP 25565",
+      "name": "minecraft-java",
+      "listen": "0.0.0.0:25565",
+      "origin": "10.0.0.5:25565",
+      "max_conns_per_ip": 8,
+      "conn_rate_per_sec": 5,
+      "conn_burst": 10
+    },
+    {
+      "_comment": "FiveM TCP side — TCP 30120 (UDP side is handled by A27-UDP-shield)",
+      "name": "fivem-tcp",
+      "listen": "0.0.0.0:30120",
+      "origin": "10.0.0.5:30120",
+      "max_conns_per_ip": 16,
+      "conn_rate_per_sec": 10,
+      "conn_burst": 20
+    },
+    {
+      "_comment": "Source engine RCON (CS2/TF2/GMod remote console) — TCP 27015. Keep caps LOW; this is admin-only.",
+      "name": "source-rcon",
+      "listen": "0.0.0.0:27015",
+      "origin": "10.0.0.5:27015",
+      "max_conns_per_ip": 2,
+      "conn_rate_per_sec": 1,
+      "conn_burst": 3
+    }
+  ]
+}

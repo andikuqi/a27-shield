@@ -1,0 +1,96 @@
+{
+  "_help": "Each service is one game to protect. Set every 'origin' to your HIDDEN backend IP:port. Enable only the games you actually run — and remember each 'listen' port must be unique on the proxy machine (two services cannot bind the same port).",
+  "session_idle_sec": 60,
+  "services": [
+    {
+      "_comment": "SA-MP — UDP 7777",
+      "name": "samp",
+      "listen": "0.0.0.0:7777",
+      "origin": "10.0.0.5:7777",
+      "min_packet_size": 1,
+      "max_packet_size": 1500,
+      "rate_per_sec": 200,
+      "burst_size": 400
+    },
+    {
+      "_comment": "FiveM game/UDP side — UDP 30120 (also add TCP 30120 in A27-TCP-shield)",
+      "name": "fivem",
+      "listen": "0.0.0.0:30120",
+      "origin": "10.0.0.5:30120",
+      "min_packet_size": 1,
+      "max_packet_size": 1500,
+      "rate_per_sec": 500,
+      "burst_size": 1000
+    },
+    {
+      "_comment": "Minecraft Bedrock — UDP 19132 (RakNet)",
+      "name": "bedrock",
+      "listen": "0.0.0.0:19132",
+      "origin": "10.0.0.5:19132",
+      "min_packet_size": 1,
+      "max_packet_size": 1500,
+      "rate_per_sec": 300,
+      "burst_size": 600
+    },
+    {
+      "_comment": "CS2 / CS:GO / Source engine (TF2, Garry's Mod, L4D2) — UDP 27015",
+      "name": "source",
+      "listen": "0.0.0.0:27015",
+      "origin": "10.0.0.5:27015",
+      "min_packet_size": 1,
+      "max_packet_size": 1500,
+      "rate_per_sec": 400,
+      "burst_size": 800
+    },
+    {
+      "_comment": "Rust (Facepunch) — UDP 28015",
+      "name": "rust",
+      "listen": "0.0.0.0:28015",
+      "origin": "10.0.0.5:28015",
+      "min_packet_size": 1,
+      "max_packet_size": 1500,
+      "rate_per_sec": 500,
+      "burst_size": 1000
+    },
+    {
+      "_comment": "Valheim game port — UDP 2456",
+      "name": "valheim-game",
+      "listen": "0.0.0.0:2456",
+      "origin": "10.0.0.5:2456",
+      "min_packet_size": 1,
+      "max_packet_size": 1500,
+      "rate_per_sec": 300,
+      "burst_size": 600
+    },
+    {
+      "_comment": "Valheim query port — UDP 2457",
+      "name": "valheim-query",
+      "listen": "0.0.0.0:2457",
+      "origin": "10.0.0.5:2457",
+      "min_packet_size": 1,
+      "max_packet_size": 1500,
+      "rate_per_sec": 200,
+      "burst_size": 400
+    },
+    {
+      "_comment": "MTA:SA (Multi Theft Auto) — UDP 22003",
+      "name": "mtasa",
+      "listen": "0.0.0.0:22003",
+      "origin": "10.0.0.5:22003",
+      "min_packet_size": 1,
+      "max_packet_size": 1500,
+      "rate_per_sec": 200,
+      "burst_size": 400
+    },
+    {
+      "_comment": "TeamSpeak 3 voice — UDP 9987",
+      "name": "teamspeak",
+      "listen": "0.0.0.0:9987",
+      "origin": "10.0.0.5:9987",
+      "min_packet_size": 1,
+      "max_packet_size": 1500,
+      "rate_per_sec": 500,
+      "burst_size": 1000
+    }
+  ]
+}

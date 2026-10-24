@@ -1,0 +1,26 @@
+[Unit]
+Description=A27-UDP-shield (hidden-origin UDP reverse proxy for game servers)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+# Adjust paths: where you deployed the binary and config on the VPS.
+WorkingDirectory=/opt/a27-udp-shield
+ExecStart=/opt/a27-udp-shield/a27-udp-shield /opt/a27-udp-shield/config.json
+Restart=on-failure
+RestartSec=2
+
+# Run as an unprivileged user (create it: sudo useradd --system --no-create-home a27).
+User=a27
+Group=a27
+
+# Hardening.
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+ReadWritePaths=/opt/a27-udp-shield
+
+[Install]
+WantedBy=multi-user.target
